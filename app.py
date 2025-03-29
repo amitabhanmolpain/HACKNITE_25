@@ -39,7 +39,10 @@ async def register_user(new_user: User):
     existing_user_query = {"email": new_user.email}
     if new_user.username:
         existing_user_query["username"] = new_user.username
-    existing_user = collection.find_one({"$or": [{"email": new_user.email}, {"username": new_user.username}]})
+    existing_user_query = {"email": new_user.email}
+    if new_user.username:
+        existing_user_query["username"] = new_user.username
+    existing_user = collection.find_one(existing_user_query)
     if existing_user:
         raise HTTPException(status_code=400, detail="Email or username already exists.")
         
